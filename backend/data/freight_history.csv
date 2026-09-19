@@ -1,0 +1,25 @@
+date,origin_port,destination_port,cargo_type,freight_usd_per_tonne,source_label
+2025-10-01,Newcastle,Paradip,Coal,31.8,Illustrative Demo Data
+2025-11-01,Newcastle,Paradip,Coal,32.6,Illustrative Demo Data
+2025-12-01,Newcastle,Paradip,Coal,33.4,Illustrative Demo Data
+2026-01-01,Newcastle,Paradip,Coal,32.9,Illustrative Demo Data
+2026-02-01,Newcastle,Paradip,Coal,34.1,Illustrative Demo Data
+2026-03-01,Newcastle,Paradip,Coal,35.2,Illustrative Demo Data
+2025-10-01,Port Hedland,Paradip,Iron ore,29.6,Illustrative Demo Data
+2025-11-01,Port Hedland,Paradip,Iron ore,30.2,Illustrative Demo Data
+2025-12-01,Port Hedland,Paradip,Iron ore,30.8,Illustrative Demo Data
+2026-01-01,Port Hedland,Paradip,Iron ore,30.4,Illustrative Demo Data
+2026-02-01,Port Hedland,Paradip,Iron ore,31.2,Illustrative Demo Data
+2026-03-01,Port Hedland,Paradip,Iron ore,31.7,Illustrative Demo Data
+2025-10-01,Richards Bay,Visakhapatnam,Coal,34.1,Illustrative Demo Data
+2025-11-01,Richards Bay,Visakhapatnam,Coal,35.0,Illustrative Demo Data
+2025-12-01,Richards Bay,Visakhapatnam,Coal,35.6,Illustrative Demo Data
+2026-01-01,Richards Bay,Visakhapatnam,Coal,36.2,Illustrative Demo Data
+2026-02-01,Richards Bay,Visakhapatnam,Coal,36.0,Illustrative Demo Data
+2026-03-01,Richards Bay,Visakhapatnam,Coal,36.9,Illustrative Demo Data
+2025-10-01,Tubarao,Chennai,Fertilizer,38.4,Illustrative Demo Data
+2025-11-01,Tubarao,Chennai,Fertilizer,39.1,Illustrative Demo Data
+2025-12-01,Tubarao,Chennai,Fertilizer,39.9,Illustrative Demo Data
+2026-01-01,Tubarao,Chennai,Fertilizer,39.4,Illustrative Demo Data
+2026-02-01,Tubarao,Chennai,Fertilizer,40.3,Illustrative Demo Data
+2026-03-01,Tubarao,Chennai,Fertilizer,41.0,Illustrative Demo Data
