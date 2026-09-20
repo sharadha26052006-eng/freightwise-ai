@@ -1,115 +1,443 @@
 # FreightWise AI
 
-FreightWise AI is a hackathon-ready freight analytics workspace for companies importing bulk cargo from overseas to India's East Coast. It helps teams compare freight assumptions, estimate landed cost, explore vessel economics, and see how scenario choices change the numerical outcome.
+## AI-Powered Freight & Logistics Decision-Support Platform
+
+FreightWise AI is an AI-powered freight and logistics decision-support platform designed to help companies importing bulk cargo to India's East Coast make faster and more informed logistics decisions.
+
+The platform brings freight forecasting, vessel comparison, procurement calculations, and scenario planning together in one workspace.
 
 > **Important:** The current workspace uses clearly labeled illustrative demo data. It is a workflow prototype, not a live market-rate feed or a validated production prediction.
 
-## Problem statement
+---
 
-Bulk cargo procurement decisions combine volatile freight, vessel fit, voyage count, and purchase assumptions. A decision maker needs more than a single quote: they need a transparent way to compare routes, timing, vessel sizes, and landed cost with the assumptions visible.
+## 🚢 Problem
 
-## Features
+Bulk cargo procurement involves several interconnected decisions:
 
-- Responsive enterprise dashboard with persistent navigation.
-- Forecast workspace for cargo type, origin, destination, quantity, date, and vessel assumptions.
-- Vessel comparison for Handysize, Supramax, Panamax, and Capesize.
-- Procurement calculator with a visible landed-cost formula.
-- Scenario planner for ship-now, ship-later, and change-vessel comparisons.
-- Methodology page that explains the baseline, uncertainty range, data quality, and limitations.
-- Standalone FastAPI backend under `backend/` with CSV loading, validation, missing-value handling, baseline forecasting, time-based evaluation, MAE reporting, vessel comparison, and procurement calculation endpoints.
+- Freight cost assumptions
+- Cargo quantity and planning
+- Vessel selection
+- Voyage economics
+- Procurement and landed cost
+- Shipment timing
 
-## Technology stack
+Teams often need to compare these factors manually across different sources.
 
-The interactive workspace is built with React 19, Vite, TypeScript, Tailwind CSS, shadcn-compatible UI primitives, Recharts, Wouter, and Lucide icons. The optional forecasting service uses Python 3.11, FastAPI, Pydantic, Pandas, scikit-learn, and Mangum for an AWS Lambda-compatible adapter.
+**FreightWise AI** brings these calculations and comparisons into a single decision-support workspace.
 
-## Architecture
+---
+
+## 💡 Solution
+
+FreightWise AI provides an interactive workspace where users can:
+
+- 📊 Forecast freight costs
+- 🚢 Compare different vessel types
+- 💰 Estimate procurement and landed costs
+- 🔄 Explore different shipping scenarios
+- 📋 Understand the assumptions behind calculations
+- 🔍 Review model methodology and limitations
+
+The goal is to make logistics planning more transparent and easier to evaluate.
+
+---
+
+## ✨ Key Features
+
+### 📊 Dashboard
+
+Provides a high-level view of:
+
+- Planned cargo
+- Freight estimate
+- Total freight
+- Model confidence
+- Freight outlook
+- Vessel economics
+
+### 📈 Freight Forecast
+
+Users can enter shipment assumptions such as:
+
+- Cargo type
+- Origin
+- Destination
+- Cargo quantity
+- Date
+- Vessel assumptions
+
+The system provides an illustrative freight estimate based on the available demo data.
+
+### 🚢 Vessel Comparison
+
+Users can compare vessel options such as:
+
+- Handysize
+- Supramax
+- Panamax
+- Capesize
+
+The comparison helps users understand how vessel selection affects voyage economics.
+
+### 💰 Procurement Calculator
+
+Calculates procurement-related costs using visible assumptions and formulas.
+
+### 🔄 Scenario Planner
+
+Allows users to compare different planning scenarios, including:
+
+- Ship now
+- Ship later
+- Change vessel
+
+Users can see how changing assumptions affects the numerical outcome.
+
+### 📚 Methodology
+
+Explains:
+
+- Forecasting approach
+- Baseline assumptions
+- Uncertainty range
+- Data quality
+- Model limitations
+
+---
+
+## 🛠️ Technical Stack
+
+### Frontend
+
+- React 19
+- TypeScript
+- Vite
+- Tailwind CSS
+- shadcn-compatible UI components
+- Recharts
+- Wouter
+- Lucide Icons
+
+### Backend
+
+- Python 3.11
+- FastAPI
+- Pydantic
+- Pandas
+- scikit-learn
+- Mangum
+
+### Data & Forecasting
+
+- CSV-based freight history
+- Route-aware trailing mean baseline
+- Chronological holdout evaluation
+- Mean Absolute Error (MAE)
+- Illustrative uncertainty range
+
+---
+
+## 🏗️ Architecture
 
 ```text
-Browser / React + Vite
-        |
-        | local illustrative calculations (default demo mode)
-        |
-        | optional VITE_API_BASE_URL
-        v
-FastAPI service (backend/main.py)
-        |
-        +-- CSV history (backend/data/freight_history.csv)
-        +-- baseline + time holdout evaluation
-        +-- /health, /forecast, /compare-vessels, /calculate-procurement
+User
+  |
+  v
+FreightWise AI Web Interface
+  |
+  +--> Dashboard
+  |
+  +--> Freight Forecast
+  |
+  +--> Vessel Comparison
+  |
+  +--> Procurement Calculator
+  |
+  +--> Scenario Planner
+  |
+  +--> Methodology
+  |
+  v
+FastAPI Backend
+  |
+  +--> Freight Forecasting
+  |
+  +--> Vessel Comparison
+  |
+  +--> Procurement Calculation
+  |
+  v
+Freight History Dataset
+  |
+  v
+AWS EC2
 ```
 
-The WebDev project shell runs the React preview through the scaffolded Node server. The FastAPI service is intentionally kept separate so a student team can deploy the frontend and backend independently on its own AWS account without requiring Amazon Bedrock.
+---
 
-## Dataset information
+## ⚙️ Backend
 
-`backend/data/freight_history.csv` is a small, synthetic-but-realistic demonstration file with monthly observations for representative routes and cargo types. It is labeled illustrative in the UI and should be replaced before operational use. Expected columns are `date`, `origin_port`, `destination_port`, `cargo_type`, `freight_usd_per_tonne`, and `source_label`.
+The backend is built using Python and FastAPI.
 
-Do not present the sample values as real market rates. For a real deployment, document the data owner, currency, unit convention, route coverage, timestamp, and update cadence.
+It provides APIs for:
 
-## Model methodology
+- Freight forecasting
+- Vessel comparison
+- Procurement calculations
+- Health/status checking
 
-The service starts with a route-aware trailing mean baseline. For a sufficiently large history, the service evaluates the baseline using a chronological holdout: the latest observations are not used to calculate the training mean, and MAE is reported from the held-out rows. If the selected dataset is too small, the response includes a warning and does not fabricate an accuracy score. A simple uncertainty range is returned only as an illustrative planning range, not a calibrated confidence interval.
+### API Endpoints
 
-The implementation leaves a seam for an advanced model, but a more complex model should only be enabled after checking row count, route coverage, missingness, and out-of-time performance.
+```text
+GET  /health
+POST /forecast
+POST /compare-vessels
+POST /calculate-procurement
+```
 
-## Local setup
+Interactive API documentation is available at `/docs` when the FastAPI service is running.
 
-### React workspace
+---
+
+## ☁️ AWS Deployment
+
+FreightWise AI is deployed using **Amazon EC2**.
+
+Amazon EC2 provides the cloud compute environment used to run the application and make the platform publicly accessible.
+
+The deployment gave our team practical experience with:
+
+- Cloud application deployment
+- Server configuration
+- Networking
+- Security groups
+- Port configuration
+- Running a web application on AWS
+
+### AWS Service Used
+
+- **Amazon EC2**
+
+---
+
+## 🧰 Build It
+
+FreightWise AI was built using open-source technologies including:
+
+- React
+- TypeScript
+- Vite
+- Python
+- FastAPI
+- Pandas
+- scikit-learn
+- Tailwind CSS
+- Recharts
+
+The frontend provides the interactive decision-support interface.
+
+The backend provides APIs for forecasting, vessel comparison, procurement calculations, and health monitoring.
+
+---
+
+## 📂 Dataset
+
+The project currently uses a small illustrative freight-history dataset located at:
+
+```text
+backend/data/freight_history.csv
+```
+
+Expected fields include:
+
+```text
+date
+origin_port
+destination_port
+cargo_type
+freight_usd_per_tonne
+source_label
+```
+
+The dataset is intended for demonstration and prototyping.
+
+It should not be interpreted as a live market-rate feed.
+
+---
+
+## 🧠 Forecasting Methodology
+
+FreightWise AI currently uses a **route-aware trailing mean baseline** for illustrative forecasting.
+
+Where sufficient historical data is available, chronological holdout evaluation is used to calculate **Mean Absolute Error (MAE)**.
+
+The application avoids presenting fabricated accuracy metrics when the available data is insufficient.
+
+The uncertainty range shown in the application is illustrative and should not be interpreted as a statistically calibrated confidence interval.
+
+---
+
+## 💻 Running Locally
+
+### Frontend
 
 ```bash
 pnpm install
 pnpm dev
 ```
 
-The WebDev preview uses the scaffolded Node server. The frontend works without a backend by using local demo calculations.
-
-### FastAPI service
+### Backend
 
 ```bash
 cd backend
-python3 -m venv .venv
+python -m venv .venv
+```
+
+For Windows:
+
+```bash
+.venv\Scripts\activate
+```
+
+For Linux/macOS:
+
+```bash
 source .venv/bin/activate
+```
+
+Install dependencies:
+
+```bash
 pip install -r requirements.txt
+```
+
+Start the backend:
+
+```bash
 uvicorn main:app --reload --port 8000
 ```
 
-Check the service with:
+Check the backend:
 
 ```bash
 curl http://localhost:8000/health
 ```
 
-The frontend can be wired to the service by setting `VITE_API_BASE_URL=http://localhost:8000` and adding a small fetch adapter around the form submission. Keeping demo mode as the default makes the hackathon walkthrough deterministic when the API is not running.
-
-## API reference
-
-- `GET /health` — service and dataset status.
-- `POST /forecast` — accepts cargo type, route, quantity, forecast date, and optional history CSV selection; returns a baseline estimate, total freight, illustrative range, warnings, and evaluation metadata.
-- `POST /compare-vessels` — accepts quantity and optional vessel rate overrides; returns capacity, voyages, freight total, and unit cost for each class.
-- `POST /calculate-procurement` — accepts quantity, purchase price, freight, and optional other costs; returns each line item and landed cost.
-
-Interactive API docs are available at `/docs` when the FastAPI service is running.
-
-## AWS deployment (low-cost path)
-
-1. Build the React workspace with `pnpm build` and upload the static assets to an S3 bucket configured for static hosting, or place the bucket behind CloudFront for HTTPS and caching.
-2. Package `backend/` for AWS Lambda. The included `Mangum` adapter exposes the FastAPI `app` to Lambda. Use API Gateway HTTP API as the public endpoint.
-3. Set `VITE_API_BASE_URL` at frontend build time to the API Gateway URL if the browser should call the backend. Never hardcode credentials or commit `.env` files.
-4. Keep the CSV inside the Lambda package for the first demo, or move it to S3 and load it at startup for a larger dataset. If the service grows beyond a small request-time model, consider a container-based Lambda or ECS Fargate.
-5. Enable CloudFront only when the team needs HTTPS, a custom domain, or caching. The S3 bucket, CloudFront distribution, API Gateway, and Lambda may all incur charges; check AWS's current pricing and free-tier terms before enabling them.
-
-Required frontend environment variable:
+The frontend can be connected to the backend using:
 
 ```text
-VITE_API_BASE_URL=https://your-api-gateway.example.com
+VITE_API_BASE_URL=http://localhost:8000
 ```
 
-No AWS credentials are required by the browser. Use an IAM role for Lambda and least-privilege bucket access if the dataset is moved to S3.
+---
 
-## 3-minute demo flow
+## 🎥 Demo Flow
 
-Introduce the bulk cargo planning problem. Open the dashboard and point out that the figures are illustrative. Open Freight forecast, choose an overseas port, Paradip, Coal, and 120,000 tonnes, then run the estimate. Compare vessel options and explain voyage count versus unit cost. Open Procurement calculator and show the visible landed-cost formula. Finish in Scenario planner and explain the numerical differences without calling one scenario universally best. Close with Methodology to show the CSV, baseline, time-based evaluation, and limitations.
+Our hackathon demonstration follows this flow:
 
-## Limitations
+1. Introduce the bulk cargo logistics problem.
+2. Show the FreightWise AI dashboard.
+3. Demonstrate Freight Forecast.
+4. Compare different vessel options.
+5. Use the Procurement Calculator.
+6. Demonstrate the Scenario Planner.
+7. Explain the Methodology and limitations.
+8. Explain the technology stack and AWS deployment.
 
-This prototype does not ingest live market data, quote charter rates, model port congestion, account for demurrage or weather, validate vessel draft and berth constraints, or produce a calibrated confidence interval. The demo UI uses local calculations until the FastAPI adapter is connected. The backend's illustrative range is not a statistical guarantee.
+---
+
+## 🔗 Project Links
+
+### 🚀 Live Demo
+
+[Open FreightWise AI Live Demo](http://13.60.5.161:3000)
+
+### 💻 GitHub Repository
+
+[FreightWise AI GitHub Repository](https://github.com/sharadha26052006-eng/freightwise-ai)
+
+### 🔗 Team Leader LinkedIn
+
+[Sharadha Kulkarni - LinkedIn](https://www.linkedin.com/in/sharadha-r-585254389/)
+
+---
+
+## 👥 Team
+
+### Sharadha — Team Lead
+
+Contributions:
+
+- Project planning
+- Frontend development
+- Dashboard design
+- Integration of freight and logistics modules
+- AWS deployment
+- Testing
+- Overall project coordination
+
+### Ganesh
+
+Contributions:
+
+- Backend and AI functionality
+- Freight forecasting
+- Logistics decision-support features
+- Testing and debugging
+- Technical integration
+
+---
+
+## 🏆 Hackathon
+
+**Project:** FreightWise AI
+
+**Track:** Ship It
+
+FreightWise AI was developed as a hackathon project to explore how AI, data analysis, and cloud technologies can support freight and logistics decision-making.
+
+---
+
+## 🚀 Future Improvements
+
+Future versions could include:
+
+- Live freight-rate data
+- Real-time port information
+- More advanced forecasting models
+- Weather and congestion data
+- Automated data ingestion
+- More detailed vessel constraints
+- Production-grade model monitoring
+- Role-based access
+- Historical performance dashboards
+
+---
+
+## ⚠️ Limitations
+
+The current prototype does not include:
+
+- Live freight market data
+- Live charter rates
+- Real-time port congestion
+- Demurrage calculations
+- Weather impacts
+- Detailed draft and berth constraints
+- Calibrated statistical confidence intervals
+
+The current dataset is illustrative and should be replaced with validated operational data before production use.
+
+---
+
+## 📌 Disclaimer
+
+FreightWise AI is a prototype decision-support application.
+
+The current forecasts and calculations use illustrative data and assumptions and should not be treated as live market information, financial advice, or operational shipping recommendations.
+
+---
+
+## 📄 License
+
+This project was created for educational and hackathon purposes.
