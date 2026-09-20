@@ -348,9 +348,9 @@ Our hackathon demonstration follows this flow:
 
 ## 🔗 Project Links
 
-### 🚀 Live Demo
+## 🚀 Live Demo
 
-http://13.60.5.161:3000/
+👉 [Open FreightWise AI](http://13.60.5.161:3000/)
 
 ### 💻 GitHub Repository
 
